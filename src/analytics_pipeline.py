@@ -16,13 +16,25 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def load_data() -> pd.DataFrame:
+    if not RAW_PATH.exists():
+        raise FileNotFoundError(f"Source dataset not found: {RAW_PATH}")
+
     df = pd.read_csv(RAW_PATH, encoding="latin1")
     df.columns = df.columns.str.strip().str.replace(" ", "_").str.replace("-", "_")
+    required_columns = {
+        "Order_ID", "Customer_ID", "Customer_Name", "Order_Date", "Ship_Date",
+        "Region", "Category", "Sub_Category", "Sales", "Quantity", "Discount", "Profit",
+    }
+    missing_columns = sorted(required_columns.difference(df.columns))
+    if missing_columns:
+        raise ValueError(f"Source dataset is missing required columns: {missing_columns}")
     df["Order_Date"] = pd.to_datetime(df["Order_Date"], errors="coerce")
     df["Ship_Date"] = pd.to_datetime(df["Ship_Date"], errors="coerce")
     for col in ["Sales", "Quantity", "Discount", "Profit"]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
     df = df.dropna(subset=["Order_ID", "Customer_ID", "Customer_Name", "Order_Date", "Sales", "Profit"])
+    if df.empty:
+        raise ValueError("No valid rows remain after source-data normalization.")
     return df.drop_duplicates().copy()
 
 

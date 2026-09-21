@@ -1,0 +1,18 @@
+Insight_Area,Metric,Dimension,Value,Unit,Context,Source_File,Source_Fields
+Revenue and KPIs,Total revenue,All data,2297200.8603,currency,Observed dataset total,business_kpis.csv,Total_Revenue
+Revenue and KPIs,Total profit,All data,286397.0217,currency,Observed dataset total,business_kpis.csv,Total_Profit
+Revenue and KPIs,Profit margin,All data,12.4672,percent,Profit divided by revenue,business_kpis.csv,Profit_Margin
+Revenue and KPIs,Total orders,All data,5009.0,orders,Distinct Order_ID count,business_kpis.csv,Total_Orders
+Revenue and KPIs,Unique customers,All data,793.0,customers,Distinct Customer_ID count,business_kpis.csv,Unique_Customers
+Category performance,Highest revenue category,Technology,836154.033,currency,Aggregated across regions and sub-categories,profitability_analysis.csv,"Category, Revenue"
+Regional performance,Highest revenue region,West,725457.8245,currency,Aggregated across categories and sub-categories,profitability_analysis.csv,"Region, Revenue"
+Regional performance,Lowest profit-margin region,Central,7.9216,percent,Profit divided by revenue,profitability_analysis.csv,"Region, Profit, Revenue"
+Profitability,Lowest-profit regional sub-category,East | Furniture | Tables,-11025.3801,currency,Aggregated profit,profitability_analysis.csv,"Region, Category, Sub_Category, Profit"
+Discount and profitability,Highest average discount,Office Supplies | Binders,37.2292,percent,Average discount for the aggregated sub-category,discount_profitability_analysis.csv,"Category, Sub_Category, Average_Discount"
+Discount and profitability,Discount-profit margin correlation,Category-sub-category aggregates,-0.5188,correlation,"Pearson correlation; descriptive association, not causation",discount_profitability_analysis.csv,"Average_Discount, Profit_Margin"
+Customer RFM,Largest customer segment,Recent Customers,176.0,customers,Distinct customers assigned to the RFM segment,customer_rfm_segments.csv,"Customer_Segment, Customer_ID"
+Monthly trend,Highest monthly revenue,2017-11,118447.825,currency,Observed monthly revenue,monthly_business_metrics.csv,"Month, Revenue"
+Forecast evaluation,MAE,Latest 12 observed months,11644.2579,currency,Chronological holdout evaluation,forecast_evaluation_metrics.csv,MAE
+Forecast evaluation,RMSE,Latest 12 observed months,14393.8289,currency,Chronological holdout evaluation,forecast_evaluation_metrics.csv,RMSE
+Forecast evaluation,MAPE,Latest 12 observed months,20.8008,percent,Chronological holdout evaluation,forecast_evaluation_metrics.csv,MAPE
+Forecast,Forecast revenue total,Next 12 monthly periods,833063.1296,currency,Sum of Prophet point forecasts,sales_forecast_output.csv,"ds, yhat"

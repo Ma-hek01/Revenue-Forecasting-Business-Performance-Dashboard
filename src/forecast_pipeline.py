@@ -63,6 +63,11 @@ def load_series():
     series["y"] = pd.to_numeric(series["y"], errors="coerce")
     series = series.dropna(subset=["ds", "y"]).sort_values("ds").reset_index(drop=True)
 
+    if series.empty:
+        raise ValueError(f"No valid monthly observations found in {input_path}.")
+    if series["ds"].duplicated().any():
+        raise ValueError("Forecast input must contain one row per monthly date.")
+
     if len(series) <= 12:
         raise ValueError("At least 13 monthly observations are required for a 12-month holdout.")
 
@@ -100,9 +105,14 @@ def main():
     final_model = Prophet()
     final_model.fit(series)
 
-    future = final_model.make_future_dataframe(periods=12, freq="ME")
-    forecast = final_model.predict(future)
-    future_forecast = forecast.tail(12)[["ds", "yhat", "yhat_lower", "yhat_upper"]]
+    # The source series is monthly at month start. Generate month-end dates for
+    # the 12 calendar months strictly after the final observed month.
+    next_month_start = (
+        series["ds"].max().to_period("M").to_timestamp() + pd.offsets.MonthBegin(1)
+    )
+    future_dates = pd.date_range(next_month_start, periods=12, freq="ME")
+    forecast = final_model.predict(pd.DataFrame({"ds": future_dates}))
+    future_forecast = forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]]
     future_forecast.to_csv(OUT / "sales_forecast_output.csv", index=False)
 
     print("Forecast evaluation:")

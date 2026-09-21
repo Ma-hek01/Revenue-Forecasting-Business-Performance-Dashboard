@@ -34,10 +34,10 @@ ORDER BY customer_revenue DESC
 LIMIT 10;
 
 -- Monthly Revenue Trend
--- The source data stores dates as MM/DD/YYYY, so strftime is applied
--- after SQLite date parsing rather than using SUBSTR on the raw string.
+-- The SQL notebook normalizes Order_Date to a real datetime before
+-- writing sales_data to SQLite, so SQLite can parse it directly.
 SELECT
-    strftime('%Y-%m', date(Order_Date)) AS month,
+    strftime('%Y-%m', Order_Date) AS month,
     SUM(Sales) AS monthly_revenue
 FROM sales_data
 GROUP BY month

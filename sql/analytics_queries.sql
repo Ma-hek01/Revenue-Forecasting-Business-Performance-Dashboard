@@ -65,6 +65,7 @@ GROUP BY Category, Sub_Category
 ORDER BY average_discount DESC;
 
 -- Monthly business trend
+-- Order_Date is normalized to a datetime before the table is written to SQLite.
 SELECT
     strftime('%Y-%m', Order_Date) AS month,
     SUM(Sales) AS revenue,
